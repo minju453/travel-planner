@@ -1,0 +1,17 @@
+# 가상환경 폴더 제외
+venv/
+.venv/
+
+# 비밀 API Key 환경변수 파일 제외 (절대 Git에 커밋 금지)
+.env
+
+# 파이썬 캐시 및 컴파일 파일 제외
+__pycache__/
+*.py[cod]
+*$py.class
+
+# OS 및 에디터 임시 파일 제외
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

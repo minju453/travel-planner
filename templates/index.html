@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI 스마트 여행 플래너</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <!-- 마크다운 렌더링용 marked 라이브러리 CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <!-- 구글 폰트: 티켓과 감성 타이포용 -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@700&family=Gaegu:wght@400;700&family=Pretendard:wght@400;600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="scrapbook-wrapper">
+    <!-- 비행기 탑승권(Boarding Pass) 티켓 헤더 -->
+    <header class="boarding-ticket">
+      <div class="ticket-left">
+        <div class="ticket-brand">
+          <span class="airline-name">✈️ AI AIRWAYS</span>
+          <span class="ticket-type">FIRST CLASS BOARDING PASS</span>
+        </div>
+        <div class="flight-route">
+          <div class="route-point">
+            <span class="route-code">MY-ROOM</span>
+            <span class="route-city">현재 위치</span>
+          </div>
+          <div class="flight-icon">
+            <span class="flight-line"></span>
+            <span class="plane-symbol">✈</span>
+          </div>
+          <div class="route-point">
+            <span class="route-code">DREAM</span>
+            <span class="route-city" id="ticketDestDisplay">당신의 여행지</span>
+          </div>
+        </div>
+        <div class="ticket-meta-grid">
+          <div class="meta-item">
+            <span class="meta-label">AI MODEL</span>
+            <span class="meta-val">Gemini 3.5 Flash</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">LIVE DATA</span>
+            <span class="meta-val">Serper Search</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">GATE / SEAT</span>
+            <span class="meta-val">A-01 / 77A</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">STATUS</span>
+            <span class="meta-val ready">READY TO FLY</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 절취선 및 펀칭 홈 -->
+      <div class="ticket-divider">
+        <div class="notch notch-top"></div>
+        <div class="dashed-line"></div>
+        <div class="notch notch-bottom"></div>
+      </div>
+
+      <!-- 티켓 우측 Stub (바코드 부분) -->
+      <div class="ticket-right">
+        <div class="stub-header">BOARDING STUB</div>
+        <div class="stub-dest" id="ticketStubDest">DESTINATION</div>
+        <div class="barcode">
+          <div class="barcode-line"></div><div class="barcode-line w-2"></div><div class="barcode-line"></div>
+          <div class="barcode-line w-3"></div><div class="barcode-line"></div><div class="barcode-line w-2"></div>
+          <div class="barcode-line"></div><div class="barcode-line w-3"></div><div class="barcode-line"></div>
+          <div class="barcode-line w-2"></div><div class="barcode-line"></div><div class="barcode-line w-3"></div>
+          <div class="barcode-line"></div><div class="barcode-line"></div><div class="barcode-line w-2"></div>
+        </div>
+        <div class="ticket-number">NO. AI-2026-TRIP</div>
+      </div>
+    </header>
+
+    <main class="content-grid">
+      <!-- 좌측: 여행 다이어리 체크리스트 폼 -->
+      <section class="scrap-card form-section">
+        <div class="washi-tape tape-top-left"></div>
+        <div class="scrap-header">
+          <div class="scrap-badge">TRAVEL CHECKLIST</div>
+          <h2 class="scrap-title">📝 나만의 여행 플랜 작성</h2>
+          <p class="scrap-subtitle">원하는 여행의 조건을 자유롭게 적어주세요!</p>
+        </div>
+
+        <form id="plannerForm">
+          <div class="form-group">
+            <label for="destination">1. 어디로 떠나시나요? (여행지) <span class="required">*</span></label>
+            <input type="text" id="destination" name="destination" placeholder="예: 일본 오사카 & 교토, 제주도, 파리" required>
+          </div>
+
+          <div class="form-group">
+            <label for="duration">2. 여행 기간은 얼마인가요? <span class="required">*</span></label>
+            <input type="text" id="duration" name="duration" placeholder="예: 3박 4일, 주말 1박 2일" required>
+          </div>
+
+          <div class="form-group">
+            <label for="budget">3. 예상하시는 예산은? <span class="required">*</span></label>
+            <input type="text" id="budget" name="budget" placeholder="예: 1인 80만원, 총 200만원, 가성비 우선" required>
+          </div>
+
+          <div class="form-group">
+            <label for="interests">4. 어떤 여행을 좋아하세요? (관심사) <span class="required">*</span></label>
+            <input type="text" id="interests" name="interests" placeholder="예: 미식 탐방, 감성 카페 투어, 미술관, 쇼핑" required>
+          </div>
+
+          <div class="form-group">
+            <label for="companions">5. 누구와 함께 떠나나요? <span class="required">*</span></label>
+            <input type="text" id="companions" name="companions" placeholder="예: 나 혼자 배낭여행, 연인과 둘이서, 부모님과 함께" required>
+          </div>
+
+          <div class="form-group">
+            <label for="transportation">6. 선호하는 이동 수단 <span class="required">*</span></label>
+            <select id="transportation" name="transportation" required>
+              <option value="">이동수단을 선택해 주세요</option>
+              <option value="대중교통 (지하철, 버스, 기차)">대중교통 (지하철, 버스, 기차)</option>
+              <option value="렌터카 / 자차 운전">렌터카 / 자차 운전</option>
+              <option value="택시 및 차량 호출 서비스">택시 및 차량 호출 서비스</option>
+              <option value="도보 위주 + 필요시 대중교통">도보 위주 + 필요시 대중교통</option>
+              <option value="복합 이동 (상황에 맞게 추천)">복합 이동 (상황에 맞게 추천)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="accommodation">7. 마음에 드는 숙소 스타일 <span class="required">*</span></label>
+            <select id="accommodation" name="accommodation" required>
+              <option value="">숙소 유형을 선택해 주세요</option>
+              <option value="4~5성급 고급 호텔 / 리조트">4~5성급 고급 호텔 / 리조트</option>
+              <option value="가성비 비즈니스 호텔">가성비 비즈니스 호텔</option>
+              <option value="감성 숙소 / 독채 에어비앤비">감성 숙소 / 독채 에어비앤비</option>
+              <option value="전통 숙소 (예: 료칸, 한옥 스테이)">전통 숙소 (예: 료칸, 한옥 스테이)</option>
+              <option value="게스트하우스 / 호스텔">게스트하우스 / 호스텔</option>
+            </select>
+          </div>
+
+          <button type="submit" id="submitBtn" class="stamp-btn">
+            <span class="btn-text">✈️ 여행 플랜 발권하기</span>
+          </button>
+        </form>
+      </section>
+
+      <!-- 우측: 여행 일기장 & 폴라로이드 결과 영역 -->
+      <section class="scrap-card result-section">
+        <div class="washi-tape tape-top-right"></div>
+        <div class="result-header">
+          <div class="result-title-box">
+            <span class="sticker-tag">TRAVEL GUIDE</span>
+            <h2 class="scrap-title" style="margin-bottom: 0;">📖 완성된 여행 플랜북</h2>
+          </div>
+          <div class="action-buttons" id="actionButtons" style="display: none;">
+            <button type="button" id="copyBtn" class="btn-pill" title="일정 전체 복사">📋 복사</button>
+            <button type="button" id="downloadBtn" class="btn-pill" title="마크다운 다운로드">💾 .md 저장</button>
+          </div>
+        </div>
+
+        <!-- 초기 안내 화면 -->
+        <div id="emptyState" class="empty-state">
+          <div class="empty-icon-box">
+            <div class="suitcase-icon">🧳</div>
+          </div>
+          <p class="empty-title">티켓 정보(왼쪽 조건)를 채우고 발권해 주세요!</p>
+          <p class="empty-desc">Serper 최신 검색과 Gemini AI가 멋진 일정과 폴라로이드 사진을 준비해 드립니다.</p>
+        </div>
+
+        <!-- 로딩 인디케이터 -->
+        <div id="loadingState" class="loading-state" style="display: none;">
+          <div class="compass-spinner">🧭</div>
+          <p class="loading-title">현지 최신 정보 검색 & 사진 수집 중...</p>
+          <p class="loading-desc">AI 여행 플래너가 맞춤 루트를 꼼꼼히 설계하고 있습니다 (약 10~20초)</p>
+        </div>
+
+        <!-- 에러 알림창 -->
+        <div id="errorAlert" class="error-alert" style="display: none;">
+          <span class="error-icon">⚠️</span>
+          <span id="errorMessage" class="error-message"></span>
+        </div>
+
+        <!-- 폴라로이드 사진 갤러리 -->
+        <div id="imageGallery" class="polaroid-gallery" style="display: none;"></div>
+
+        <!-- 최종 마크다운 결과 렌더링 영역 -->
+        <div id="resultContent" class="notebook-content" style="display: none;"></div>
+      </section>
+    </main>
+
+    <footer class="travel-footer">
+      <div class="footer-note">
+        📌 <strong>Traveler's Tip:</strong> 변동 가능성이 있는 가격, 운영시간, 입장료는 <code>[확인 필요]</code> 스티커가 붙어 있으니 출발 전 공식 채널을 꼭 확인해 보세요!
+      </div>
+    </footer>
+  </div>
+
+  <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>

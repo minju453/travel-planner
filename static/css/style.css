@@ -1,0 +1,684 @@
+/* ==========================================================================
+   AI 여행 플래너 스타일시트 - Scrapbook & Flight Ticket Theme
+   Inspired by Pinterest Travel Scrapbook Aesthetic
+   ========================================================================== */
+
+:root {
+  --primary-blue: #2b5c92;
+  --dark-indigo: #1e3a5f;
+  --sky-blue: #7097c2;
+  --soft-blue: #dce7f3;
+  --cream-paper: #faf8f5;
+  --card-paper: #ffffff;
+  --grid-line: rgba(70, 110, 160, 0.12);
+  --tape-color: rgba(94, 142, 198, 0.45);
+  --text-dark: #1b2838;
+  --text-muted: #5a6e85;
+  --warning-stamp: #d97706;
+  --border-subtle: #d3dfed;
+  --shadow-paper: 0 8px 24px rgba(30, 58, 95, 0.12), 0 2px 6px rgba(0, 0, 0, 0.04);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Segoe UI", Roboto, sans-serif;
+  color: var(--text-dark);
+  min-height: 100vh;
+  padding: 32px 18px 48px;
+  line-height: 1.6;
+  /* 모눈종이(Grid Notebook) 배경 */
+  background-color: #eaf1f8;
+  background-image: 
+    linear-gradient(var(--grid-line) 1.5px, transparent 1.5px),
+    linear-gradient(90deg, var(--grid-line) 1.5px, transparent 1.5px);
+  background-size: 24px 24px;
+}
+
+.scrapbook-wrapper {
+  max-width: 1240px;
+  margin: 0 auto;
+}
+
+/* ==========================================================================
+   1. 비행기 탑승권 (Boarding Ticket) 헤더 디자인
+   ========================================================================== */
+.boarding-ticket {
+  display: flex;
+  background: #ffffff;
+  border-radius: 18px;
+  box-shadow: var(--shadow-paper);
+  border: 1.5px solid var(--border-subtle);
+  margin-bottom: 32px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* 티켓 좌측 메인 */
+.ticket-left {
+  flex: 1;
+  padding: 26px 32px;
+  background: linear-gradient(135deg, #ffffff 0%, #f4f8fd 100%);
+}
+
+.ticket-brand {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.airline-name {
+  font-family: 'Courier Prime', monospace;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--primary-blue);
+  letter-spacing: 2px;
+}
+
+.ticket-type {
+  font-size: 0.75rem;
+  font-weight: 800;
+  background: var(--dark-indigo);
+  color: #ffffff;
+  padding: 4px 10px;
+  border-radius: 4px;
+  letter-spacing: 1px;
+}
+
+/* 노선 표시 */
+.flight-route {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  padding: 12px 16px;
+  background: rgba(220, 231, 243, 0.4);
+  border-radius: 12px;
+  border: 1px dashed var(--sky-blue);
+}
+
+.route-point {
+  display: flex;
+  flex-direction: column;
+}
+
+.route-code {
+  font-family: 'Courier Prime', monospace;
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--dark-indigo);
+  letter-spacing: 1px;
+}
+
+.route-city {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.flight-icon {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  margin: 0 24px;
+  position: relative;
+}
+
+.flight-line {
+  flex: 1;
+  height: 2px;
+  background: repeating-linear-gradient(90deg, var(--sky-blue) 0, var(--sky-blue) 6px, transparent 6px, transparent 12px);
+}
+
+.plane-symbol {
+  font-size: 1.3rem;
+  color: var(--primary-blue);
+  margin-left: 8px;
+}
+
+/* 티켓 상세 메타 정보 */
+.ticket-meta-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.meta-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.meta-label {
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: var(--text-muted);
+  letter-spacing: 1px;
+  margin-bottom: 2px;
+}
+
+.meta-val {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-dark);
+}
+
+.meta-val.ready {
+  color: #16a34a;
+}
+
+/* 절취선 및 타공 홈 (Notch) */
+.ticket-divider {
+  width: 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.dashed-line {
+  height: 100%;
+  width: 0;
+  border-left: 2px dashed #b8cde3;
+}
+
+.notch {
+  width: 28px;
+  height: 28px;
+  background-color: #eaf1f8; /* 배경색과 일치시켜 뚫린 효과 */
+  border-radius: 50%;
+  position: absolute;
+  left: 2px;
+  box-shadow: inset 0 2px 4px rgba(30, 58, 95, 0.15);
+}
+
+.notch-top {
+  top: -14px;
+}
+
+.notch-bottom {
+  bottom: -14px;
+}
+
+/* 티켓 우측 Stub */
+.ticket-right {
+  width: 210px;
+  padding: 26px 20px;
+  background: #fdfefe;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  text-align: center;
+}
+
+.stub-header {
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: var(--text-muted);
+  letter-spacing: 1px;
+}
+
+.stub-dest {
+  font-family: 'Courier Prime', monospace;
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--primary-blue);
+  margin: 6px 0;
+}
+
+/* 바코드 그래픽 */
+.barcode {
+  display: flex;
+  align-items: stretch;
+  height: 48px;
+  gap: 2.5px;
+  margin: 12px 0;
+}
+
+.barcode-line {
+  width: 2px;
+  background-color: #1e293b;
+  border-radius: 1px;
+}
+
+.barcode-line.w-2 {
+  width: 4px;
+}
+
+.barcode-line.w-3 {
+  width: 6px;
+}
+
+.ticket-number {
+  font-family: 'Courier Prime', monospace;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  letter-spacing: 1px;
+}
+
+/* 반응형 티켓 */
+@media (max-width: 860px) {
+  .boarding-ticket {
+    flex-direction: column;
+  }
+  .ticket-divider {
+    width: 100%;
+    height: 32px;
+  }
+  .dashed-line {
+    width: 100%;
+    height: 0;
+    border-top: 2px dashed #b8cde3;
+    border-left: none;
+  }
+  .notch-top {
+    left: -14px;
+    top: 2px;
+  }
+  .notch-bottom {
+    right: -14px;
+    left: auto;
+    top: 2px;
+    bottom: auto;
+  }
+  .ticket-right {
+    width: 100%;
+    flex-direction: row;
+    padding: 16px 24px;
+  }
+  .ticket-meta-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* ==========================================================================
+   2. 스크랩북 2단 레이아웃 & 마스킹 테이프 장식
+   ========================================================================== */
+.content-grid {
+  display: grid;
+  grid-template-columns: 420px 1fr;
+  gap: 28px;
+  align-items: start;
+}
+
+@media (max-width: 960px) {
+  .content-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.scrap-card {
+  background: var(--card-paper);
+  border-radius: 16px;
+  padding: 30px;
+  position: relative;
+  box-shadow: var(--shadow-paper);
+  border: 1px solid var(--border-subtle);
+}
+
+/* 마스킹 테이프 효과 */
+.washi-tape {
+  position: absolute;
+  width: 110px;
+  height: 28px;
+  background-color: var(--tape-color);
+  opacity: 0.85;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  pointer-events: none;
+  z-index: 10;
+}
+
+.tape-top-left {
+  top: -12px;
+  left: 24px;
+  transform: rotate(-3deg);
+  border-left: 2px dashed rgba(255, 255, 255, 0.7);
+  border-right: 2px dashed rgba(255, 255, 255, 0.7);
+}
+
+.tape-top-right {
+  top: -12px;
+  right: 28px;
+  transform: rotate(4deg);
+  border-left: 2px dashed rgba(255, 255, 255, 0.7);
+  border-right: 2px dashed rgba(255, 255, 255, 0.7);
+}
+
+.scrap-header {
+  margin-bottom: 22px;
+}
+
+.scrap-badge {
+  display: inline-block;
+  background: var(--primary-blue);
+  color: #ffffff;
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 3px 10px;
+  border-radius: 4px;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+}
+
+.scrap-title {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--dark-indigo);
+  margin-bottom: 4px;
+}
+
+.scrap-subtitle {
+  font-size: 0.88rem;
+  color: var(--text-muted);
+}
+
+/* ==========================================================================
+   3. 체크리스트 폼 스타일
+   ========================================================================== */
+.form-group {
+  margin-bottom: 18px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #2c3e50;
+  margin-bottom: 6px;
+}
+
+.form-group .required {
+  color: #ef4444;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 11px 14px;
+  border: 1.5px solid #cbdbe9;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  color: var(--text-dark);
+  background-color: #f8fafc;
+  transition: all 0.2s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: var(--primary-blue);
+  background-color: #ffffff;
+  box-shadow: 0 0 0 3px rgba(43, 92, 146, 0.15);
+}
+
+/* 도장/스탬프 느낌의 발권 버튼 */
+.stamp-btn {
+  width: 100%;
+  background: linear-gradient(135deg, var(--primary-blue) 0%, var(--dark-indigo) 100%);
+  color: #ffffff;
+  font-size: 1.05rem;
+  font-weight: 700;
+  padding: 14px 20px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  margin-top: 10px;
+  box-shadow: 0 4px 12px rgba(30, 58, 95, 0.25);
+  transition: all 0.2s ease;
+}
+
+.stamp-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(30, 58, 95, 0.35);
+}
+
+.stamp-btn:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+/* ==========================================================================
+   4. 폴라로이드 사진 갤러리 (레퍼런스 이미지 스타일)
+   ========================================================================== */
+.polaroid-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+  padding: 16px;
+  background: #edf3f9;
+  border-radius: 12px;
+  border: 1px dashed var(--sky-blue);
+}
+
+.polaroid-card {
+  background: #ffffff;
+  padding: 8px 8px 22px 8px; /* 하단이 넓은 폴라로이드 사진 비율 */
+  border-radius: 4px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+/* 사진마다 약간씩 자연스럽게 기울어진 폴라로이드 각도 */
+.polaroid-card:nth-child(1) { transform: rotate(-2.5deg); }
+.polaroid-card:nth-child(2) { transform: rotate(1.8deg); }
+.polaroid-card:nth-child(3) { transform: rotate(-1.5deg); }
+.polaroid-card:nth-child(4) { transform: rotate(2.2deg); }
+
+.polaroid-card:hover {
+  transform: scale(1.06) rotate(0deg);
+  z-index: 5;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.2);
+}
+
+.polaroid-card img {
+  width: 100%;
+  height: 105px;
+  object-fit: cover;
+  border-radius: 2px;
+  display: block;
+}
+
+.polaroid-caption {
+  position: absolute;
+  bottom: 4px;
+  left: 6px;
+  right: 6px;
+  text-align: center;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #475569;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ==========================================================================
+   5. 결과 헤더 & 다이어리 마크다운 렌더링
+   ========================================================================== */
+.result-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  border-bottom: 1.5px solid var(--border-subtle);
+  padding-bottom: 14px;
+}
+
+.sticker-tag {
+  display: inline-block;
+  background: #e0edfb;
+  color: var(--primary-blue);
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: 4px;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-pill {
+  background: #ffffff;
+  border: 1.5px solid var(--border-subtle);
+  color: var(--dark-indigo);
+  padding: 6px 14px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-pill:hover {
+  background: #f0f6fc;
+  border-color: var(--primary-blue);
+}
+
+/* 빈 상태 & 로딩 상태 */
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--text-muted);
+}
+
+.suitcase-icon {
+  font-size: 3.5rem;
+  margin-bottom: 16px;
+}
+
+.empty-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--dark-indigo);
+  margin-bottom: 6px;
+}
+
+.empty-desc {
+  font-size: 0.9rem;
+}
+
+.loading-state {
+  text-align: center;
+  padding: 60px 20px;
+}
+
+.compass-spinner {
+  font-size: 3rem;
+  display: inline-block;
+  animation: spin-compass 2s infinite ease-in-out;
+  margin-bottom: 16px;
+}
+
+@keyframes spin-compass {
+  0% { transform: rotate(0deg); }
+  50% { transform: rotate(180deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loading-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--dark-indigo);
+  margin-bottom: 6px;
+}
+
+.loading-desc {
+  font-size: 0.88rem;
+  color: var(--text-muted);
+}
+
+/* 에러 알림 */
+.error-alert {
+  background-color: #fee2e2;
+  color: #b91c1c;
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin-bottom: 18px;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* 다이어리 스타일 마크다운 결과 */
+.notebook-content {
+  line-height: 1.85;
+  color: #1e293b;
+  max-height: 800px;
+  overflow-y: auto;
+  padding-right: 8px;
+}
+
+.notebook-content h2 {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--dark-indigo);
+  margin: 28px 0 14px 0;
+  padding-bottom: 6px;
+  border-bottom: 2px solid #dce7f3;
+}
+
+.notebook-content h2:first-child {
+  margin-top: 0;
+}
+
+.notebook-content h3 {
+  font-size: 1.12rem;
+  font-weight: 700;
+  color: var(--primary-blue);
+  margin: 18px 0 8px 0;
+}
+
+.notebook-content p {
+  margin-bottom: 12px;
+}
+
+.notebook-content ul,
+.notebook-content ol {
+  padding-left: 22px;
+  margin-bottom: 14px;
+}
+
+.notebook-content li {
+  margin-bottom: 6px;
+}
+
+/* [확인 필요] 스티커 배지 디자인 */
+.notebook-content code {
+  background-color: #fef3c7;
+  color: #b45309;
+  padding: 2px 7px;
+  border-radius: 4px;
+  font-weight: 800;
+  font-size: 0.85em;
+  border: 1px dashed #f59e0b;
+  letter-spacing: 0.5px;
+}
+
+/* 푸터 */
+.travel-footer {
+  text-align: center;
+  margin-top: 36px;
+}
+
+.footer-note {
+  display: inline-block;
+  background: #ffffff;
+  padding: 8px 20px;
+  border-radius: 30px;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  border: 1px solid var(--border-subtle);
+}
