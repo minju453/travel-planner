@@ -95,12 +95,16 @@ def index():
 @app.route("/generate", methods=["POST"])
 def generate():
     """
-    7가지 사용자 입력을 받아 Serper 검색 + 이미지 검색 후 Gemini 모델로
+    7가지 사용자 입력을 받아 Serper 검색 + 이미지 검색 후 가용 Gemini 모델로
     6가지 항목이 포함된 여행 일정을 생성합니다.
-    (429 Quota 에러 방지를 위한 멀티 모델 Fallback 지원)
     """
-    # 1. API 키 확인
-    if not GEMINI_API_KEY:
+    # 1. API 키 확인 (파일 직접 재확인 포함)
+    current_key = os.getenv("GEMINI_API_KEY")
+    if not current_key:
+        load_dotenv(override=True)
+        current_key = os.getenv("GEMINI_API_KEY")
+
+    if not current_key:
         return jsonify({
             "success": False,
             "error": "GEMINI_API_KEY가 .env 파일에 설정되어 있지 않습니다."
@@ -116,7 +120,7 @@ def generate():
     transportation = data.get("transportation", "").strip()
     accommodation = data.get("accommodation", "").strip()
 
-    # 3. 백엔드 필수 입력 검증 (7가지 항목 모두 검증)
+    # 3. 필수 입력 검증
     missing_fields = []
     if not destination: missing_fields.append("여행지")
     if not duration: missing_fields.append("여행 기간")
@@ -132,12 +136,12 @@ def generate():
             "error": f"다음 필수 입력 항목이 누락되었습니다: {', '.join(missing_fields)}"
         }), 400
 
-    # 4. Serper.dev API로 최신 여행지 정보 및 이미지 검색
+    # 4. Serper.dev 실시간 정보 및 사진 검색
     search_query = f"{destination} 여행 추천 코스 명소 맛집 최신 정보"
     search_results = search_serper(search_query)
     images = search_serper_images(destination, limit=4)
 
-    # 5. Gemini 프롬프트 구성
+    # 5. 프롬프트 구성
     system_instruction = (
         "당신은 전 세계 여행을 깊이 이해하고 있는 전문 수석 여행 플래너입니다.\n"
         "사용자가 제공한 여행 조건과 검색된 최신 현지 정보를 기반으로 실용적이고 완벽한 여행 일정을 한국어로 작성해야 합니다.\n\n"
@@ -172,15 +176,15 @@ def generate():
 위 정보를 종합하여, 6가지 필수 항목을 포함하고 변동 가능 정보에 `[확인 필요]` 레이블이 충실히 적용된 최적의 여행 계획서를 완성해 주세요.
 """
 
-    # 429 한도 초과 방지용 모델 우선순위 목록 (무료 한도가 넉넉한 모델 순차 시도)
+    # 현재 쿼터가 살아있는 검증된 모델 목록 (우선순위 순서)
     candidate_models = [
-        "gemini-2.5-flash",
-        "gemini-2.0-flash",
-        "gemini-1.5-flash",
-        "gemini-3.5-flash"
+        "gemini-3.5-flash-lite",
+        "gemini-3.8-flash",
+        "gemini-3.5-flash",
+        "gemini-flash-latest"
     ]
 
-    client = genai.Client(api_key=GEMINI_API_KEY)
+    client = genai.Client(api_key=current_key)
     last_error = ""
 
     for model_name in candidate_models:
@@ -203,18 +207,12 @@ def generate():
                 "used_model": model_name
             })
         except Exception as e:
-            error_str = str(e)
-            last_error = error_str
-            # 만약 429(할당량 초과) 또는 특정 모델을 찾을 수 없는 경우 다음 모델로 자동 시도
-            if "429" in error_str or "RESOURCE_EXHAUSTED" in error_str or "404" in error_str:
-                continue
-            else:
-                # 429가 아닌 다른 치명적인 오류는 즉시 반환
-                break
+            last_error = str(e)
+            continue
 
     return jsonify({
         "success": False,
-        "error": f"일정 생성 중 할당량 초과 오류가 발생했습니다. 잠시 후 다시 시도해 주세요. (세부 내용: {last_error})"
+        "error": f"일정 생성 실패: {last_error}"
     }), 500
 
 
